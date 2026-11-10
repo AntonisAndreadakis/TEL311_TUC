@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<title>ΤΗΛ311 - Αναφορά 4ης Σειράς Ασκήσεων</title>
+<style>
+  @page { size: A4; margin: 18mm 21mm 17mm 21mm; }
+  body { font-family: "FreeSerif", "Times New Roman", "DejaVu Serif", serif; font-size: 11pt; line-height: 1.36; color: #000; }
+  header { text-align: center; margin-bottom: 9mm; }
+  header h1 { font-size: 17pt; margin: 0 0 4mm; color: #1f4e9c; }
+  header h2 { font-size: 14pt; margin: 0 0 4mm; color: #1f4e9c; }
+  header p { text-align: center; margin: 0; font-size: 12.5pt; font-weight: bold; color: #1f4e9c; }
+  header .rev { font-weight: normal; font-size: 10.5pt; color: #444; margin-top: 3mm; }
+  h3 { font-size: 13pt; margin: 8mm 0 2mm; color: #1f4e9c; break-after: avoid; }
+  h4 { font-size: 11.5pt; margin: 5mm 0 1mm; break-after: avoid; }
+  p { text-align: justify; margin: 0 0 2.5mm; }
+  ol.roman { list-style-type: lower-roman; margin: 1mm 0 3mm; padding-left: 12mm; }
+  ol.roman li { text-align: justify; margin-bottom: 2.5mm; padding-left: 2mm; }
+  ul { margin: 1mm 0 3mm; padding-left: 8mm; }
+  ul li { text-align: justify; margin-bottom: 1mm; }
+  table { border-collapse: collapse; margin: 3mm auto 2mm; font-size: 10.5pt; break-inside: avoid; }
+  th, td { border: 0.6pt solid #666; padding: 1.2mm 3.2mm; text-align: center; }
+  th { background: #e9eef7; }
+  td.l, th.l { text-align: left; }
+  caption { caption-side: bottom; font-size: 9.5pt; color: #333; padding-top: 1.5mm; text-align: justify; }
+  figure { margin: 3mm 0; text-align: center; break-inside: avoid; }
+  figure img { max-width: 100%; }
+  figcaption { font-size: 9.5pt; color: #333; margin-top: 1mm; }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 0 8mm; align-items: center; margin: 3mm 12mm; break-inside: avoid; }
+  .pair img { width: 100%; }
+  .keep { break-inside: avoid; }
+  .keep .pair { margin-top: 1mm; }
+  .deriv { margin: 1mm 0 3mm; break-inside: avoid; }
+  .deriv img { width: 100%; }
+  .frac { display: inline-block; vertical-align: middle; text-align: center; font-size: 10pt; line-height: 1.15; }
+  .frac span { display: block; padding: 0 1mm; }
+  .frac span:first-child { border-bottom: 0.6pt solid #000; }
+  p.eq { text-align: center; margin: 2mm 0 3mm; }
+  .newpage { break-before: page; }
+  code { font-family: "DejaVu Sans Mono", monospace; font-size: 9.5pt; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Στατιστική Μοντελοποίηση και Αναγνώριση Προτύπων (ΤΗΛ311)</h1>
+  <h2>Αναφορά 4ης Σειράς Ασκήσεων</h2>
+  <p>Ανδρεαδάκης Αντώνης 2013030059</p>
+  <p class="rev">Αναθεωρημένη έκδοση (Νοέμβριος 2026): στην άσκηση 2 διορθώθηκαν οι αποδείξεις των ερωτημάτων (b) και (c) και ξαναγράφτηκε το ερώτημα (d) μετά από διόρθωση του κώδικα. Οι ασκήσεις 1 και 3 παραμένουν όπως στην αρχική αναφορά.</p>
+</header>
+
+<h3>1. Feature Selection, Cross Validation και Overfitting</h3>
+
+<p>Για την άσκηση αυτή, καλούμαστε να απαντήσουμε στο ερώτημα: Κατά τη διαδικασία της ταξινόμησης, σε ποιο σημείο είναι ιδανικό να εφαρμοστεί επιλογή των χαρακτηριστικών (feature selection); Για τα δεδομένα προσομοίωσης του πειράματός μας (ασθενείς με αυτισμό ή όχι), δοκιμάστηκαν οι εξής τεχνικές:</p>
+
+<ol class="roman">
+  <li>Leave one out χωρίς feature selection. Ταξινομούμε τα δεδομένα μας με χρήση SVM και με την κλασσική τεχνική Leave one out έχουμε ένα δεδομένο test και όλα τα υπόλοιπα δεδομένα εκπαίδευσης. Αρκετά αποτελεσματική μέθοδος και εύκολη στην υλοποίηση, πετυχαίνει ακρίβεια περίπου 50%.</li>
+  <li>Modified Leave one out χρησιμοποιώντας έναν αλγόριθμο σύγκρισης με χρήση επιλογής χαρακτηριστικών, βασισμένος στο συντελεστή συσχέτισης. Σε κάθε επανάληψη του Leave one out, εφαρμόζουμε feature selection. Η τεχνική αυτή, επίσης πετυχαίνει ακρίβεια περίπου 50% (αναμενόμενο όπως η προηγούμενη), καθώς τα τεχνητά μας δεδομένα δεν δίνουν πληροφορίες για τους ασθενείς.</li>
+  <li>Modified Leave one out με επιλογή των χαρακτηριστικών μια φορά στην αρχή. Δυστυχώς, στην περίπτωση αυτή έχουμε overfitting και για αυτό το λόγο έχουμε σταθερή ακρίβεια 100%.</li>
+</ol>
+
+<p>Ενδεικτικά:</p>
+<figure><img src="figures/ex1-output.jpg" style="width: 118mm"></figure>
+
+<h3 class="newpage">2. Υλοποίηση ενός απλού νευρωνικού δικτύου</h3>
+
+<p>Στην άσκηση αυτή, σκοπός ήταν η δημιουργία του πιο απλού νευρωνικού δικτύου που μπορεί να υπάρξει. Δηλαδή ένα δίκτυο μόνο με είσοδο και έξοδο, χωρίς κρυφό επίπεδο. Ως συνάρτηση ενεργοποίησης δικτύου, χρησιμοποιήθηκε η sigmoid συνάρτηση (την οποία έχουμε συναντήσει σε παλαιότερο σετ ασκήσεων) και ορίζεται ως
+<i>f</i>(<i>z</i>) = <span class="frac"><span>1</span><span>1 + <i>e</i><sup>−<i>z</i></sup></span></span>. Για τον υπολογισμό του σφάλματος, μεταξύ της πρόβλεψης και της πραγματικής τιμής, χρησιμοποιήθηκε η συνάρτηση cross-entropy που ορίζεται ως:</p>
+<figure><img src="figures/ex2-cross-entropy.jpg" style="width: 118mm"></figure>
+<p>Η υλοποίηση του κώδικα έγινε τόσο σε matlab όσο και σε python.</p>
+
+<h4>a)</h4>
+<div class="deriv"><img src="figures/ex2-derivation-a.jpg"></div>
+<h4>b)</h4>
+<p>Ξεκινάμε από τη μορφή του ερωτήματος (a). Το <i>z</i><sup>(i)</sup> εμφανίζεται μόνο στον <i>i</i>-οστό όρο του αθροίσματος, οπότε παραγωγίζουμε μόνο αυτόν:</p>
+<p class="eq"><span class="frac"><span>∂<i>J</i></span><span>∂<i>z</i><sup>(i)</sup></span></span> = <span class="frac"><span>1</span><span><i>B</i></span></span> <span class="frac"><span>∂</span><span>∂<i>z</i><sup>(i)</sup></span></span> [ <i>z</i><sup>(i)</sup> − <i>z</i><sup>(i)</sup><i>y</i><sup>(i)</sup> + ln(1 + <i>e</i><sup>−<i>z</i><sup>(i)</sup></sup>) ] = <span class="frac"><span>1</span><span><i>B</i></span></span> [ 1 − <i>y</i><sup>(i)</sup> − <span class="frac"><span><i>e</i><sup>−<i>z</i><sup>(i)</sup></sup></span><span>1 + <i>e</i><sup>−<i>z</i><sup>(i)</sup></sup></span></span> ]</p>
+<p>Επειδή 1 − <span class="frac"><span><i>e</i><sup>−<i>z</i><sup>(i)</sup></sup></span><span>1 + <i>e</i><sup>−<i>z</i><sup>(i)</sup></sup></span></span> = <span class="frac"><span>1</span><span>1 + <i>e</i><sup>−<i>z</i><sup>(i)</sup></sup></span></span> = <i>f</i>(<i>z</i><sup>(i)</sup>) = <i>ŷ</i><sup>(i)</sup>, παίρνουμε</p>
+<p class="eq"><span class="frac"><span>∂<i>J</i></span><span>∂<i>z</i><sup>(i)</sup></span></span> = <span class="frac"><span>1</span><span><i>B</i></span></span> ( <i>ŷ</i><sup>(i)</sup> − <i>y</i><sup>(i)</sup> ).</p>
+<p>Ο παράγοντας 1/<i>B</i> προέρχεται από τον μέσο όρο στο batch. Για το σφάλμα ενός μόνο δείγματος (<i>B</i> = 1) η παράγωγος είναι −<i>y</i><sup>(i)</sup> + <i>ŷ</i><sup>(i)</sup>, όπως ζητείται.</p>
+<h4>c)</h4>
+<p>Από τη σχέση <i>z</i><sup>(i)</sup> = <i>x</i><sup>(i)</sup><i>W</i> + <i>b</i> έχουμε <span class="frac"><span>∂<i>z</i><sup>(i)</sup></span><span>∂<i>W</i></span></span> = (<i>x</i><sup>(i)</sup>)<sup>T</sup> και <span class="frac"><span>∂<i>z</i><sup>(i)</sup></span><span>∂<i>b</i></span></span> = 1. Με τον κανόνα της αλυσίδας και το αποτέλεσμα του (b):</p>
+<p class="eq"><span class="frac"><span>∂<i>J</i></span><span>∂<i>W</i></span></span> = Σ<sub>i</sub> <span class="frac"><span>∂<i>z</i><sup>(i)</sup></span><span>∂<i>W</i></span></span> <span class="frac"><span>∂<i>J</i></span><span>∂<i>z</i><sup>(i)</sup></span></span> = <span class="frac"><span>1</span><span><i>B</i></span></span> Σ<sub>i</sub> (<i>x</i><sup>(i)</sup>)<sup>T</sup> ( <i>ŷ</i><sup>(i)</sup> − <i>y</i><sup>(i)</sup> ) = <span class="frac"><span>1</span><span><i>B</i></span></span> <i>X</i><sup>T</sup>(<i>Ŷ</i> − <i>Y</i>)</p>
+<p class="eq"><span class="frac"><span>∂<i>J</i></span><span>∂<i>b</i></span></span> = Σ<sub>i</sub> <span class="frac"><span>∂<i>z</i><sup>(i)</sup></span><span>∂<i>b</i></span></span> <span class="frac"><span>∂<i>J</i></span><span>∂<i>z</i><sup>(i)</sup></span></span> = <span class="frac"><span>1</span><span><i>B</i></span></span> Σ<sub>i</sub> ( <i>ŷ</i><sup>(i)</sup> − <i>y</i><sup>(i)</sup> )</p>
+<p>Εδώ <i>X</i> είναι ο πίνακας <i>B</i> × 2 με γραμμές τα δείγματα <i>x</i><sup>(i)</sup> του batch και <i>Ŷ</i>, <i>Y</i> τα διανύσματα <i>B</i> × 1 των προβλέψεων και των ετικετών. Η παράγωγος ως προς το <i>W</i> έχει τις ίδιες διαστάσεις με το <i>W</i> (2 × 1). Αυτές ακριβώς τις δύο σχέσεις υπολογίζει η συνάρτηση <code>backward</code>.</p>
+
+<h4>d)</h4>
+
+<p>Για το forward propagation του NN, χρειάστηκε να υπολογιστεί η είσοδος πολλαπλασιασμένη με τα βάρη και να προστεθεί το bias. Έπειτα, το αποτέλεσμα αυτό δίνεται ως είσοδος στην sigmoid συνάρτηση κι έτσι βρίσκουμε την έξοδο του δικτύου μας. Στη συνέχεια, αξιολογούμε το αποτέλεσμα με χρήση της cross-entropy. Για να ελαχιστοποιήσουμε αυτές τις απώλειες και να μπορέσουν να ανανεωθούν οι τιμές των βαρών και το bias του δικτύου, γίνεται μια «ανατροφοδότηση» της προβλεπόμενης εξόδου στο δίκτυο. Η διαδικασία αυτή λέγεται back propagation. Με την εύρεση των επιθυμητών παραγώγων, ανανεώνονται τα βάρη και το bias όπως φαίνεται στον κώδικα.</p>
+
+<p>Πιο συγκεκριμένα, για κάθε batch <i>X</i> (πίνακας <i>B</i> × 2) με ετικέτες <i>Y</i> (<i>B</i> × 1) ο κώδικας υπολογίζει:</p>
+<ul>
+  <li>forward: <i>Ŷ</i> = <i>f</i>(<i>XW</i> + <i>b</i>), με <i>W</i> διαστάσεων 2 × 1,</li>
+  <li>σφάλμα: τον μέσο όρο της cross-entropy στα <i>B</i> δείγματα του batch,</li>
+  <li>backward: ∂<i>J</i>/∂<i>W</i> = <i>X</i><sup>T</sup>(<i>Ŷ</i> − <i>Y</i>) / <i>B</i> και ∂<i>J</i>/∂<i>b</i> = Σ<sub>i</sub>(<i>ŷ</i><sup>(i)</sup> − <i>y</i><sup>(i)</sup>) / <i>B</i>,</li>
+  <li>ανανέωση: <i>W</i> ← <i>W</i> − <i>η</i> ∂<i>J</i>/∂<i>W</i> και <i>b</i> ← <i>b</i> − <i>η</i> ∂<i>J</i>/∂<i>b</i>.</li>
+</ul>
+
+<p>Οι δύο υλοποιήσεις (matlab και python) χρησιμοποιούν τις ίδιες ρυθμίσεις, ώστε τα αποτελέσματά τους να είναι συγκρίσιμα. Κάθε χαρακτηριστικό (βαθμός) κανονικοποιείται ξεχωριστά, αφαιρώντας τη μέση τιμή του και διαιρώντας με την τυπική του απόκλιση. Τα βάρη αρχικοποιούνται τυχαία από κανονική κατανομή με διασπορά 2/(2 + 1) και το bias στο μηδέν. Το batch έχει 8 δείγματα και μετακινείται κατά ένα δείγμα κάθε φορά (93 batches ανά εποχή), ο ρυθμός μάθησης είναι <i>η</i> = 0,001 και η εκπαίδευση διαρκεί 500 εποχές. Ελέγξαμε επίσης το backward και στις δύο υλοποιήσεις συγκρίνοντας τις παραγώγους με αριθμητικές παραγώγους (πεπερασμένες διαφορές) και οι τιμές συμπίπτουν.</p>
+
+<p>Σε σχέση με την αρχική υποβολή διορθώθηκαν οι αποδείξεις των ερωτημάτων (b) και (c) και ο κώδικας: η κανονικοποίηση συγχώνευε τα δύο χαρακτηριστικά σε ένα (διαίρεση πινάκων <code>/</code> αντί για <code>./</code>), το batch είχε 9 δείγματα αντί για 8, η cross-entropy ήταν άθροισμα αντί για μέσος όρος και η πιθανότητα του παραδείγματος [45, 85] δεν υπολογιζόταν σωστά. Γι' αυτό οι τιμές του <code>epoch_loss</code> και της πιθανότητας που δίνονται εδώ διαφέρουν από εκείνες της αρχικής αναφοράς.</p>
+
+<p>Τα αποτελέσματα των δύο υλοποιήσεων φαίνονται στον παρακάτω πίνακα. Ο κώδικας matlab εκτελέστηκε σε GNU Octave με <code>randn('state',1)</code> και ο κώδικας python με <code>np.random.seed(0)</code>.</p>
+
+<table>
+  <tr><th class="l"></th><th>MATLAB</th><th>Python</th></tr>
+  <tr><td class="l">epoch_loss, εποχή 1</td><td>1,8779</td><td>0,4384</td></tr>
+  <tr><td class="l">epoch_loss, εποχή 55</td><td>0,5551</td><td>0,3178</td></tr>
+  <tr><td class="l">epoch_loss, εποχή 500</td><td>0,2310</td><td>0,2254</td></tr>
+  <tr><td class="l">Βάρη <i>W</i> μετά την εκπαίδευση</td><td>[2,375  2,174]</td><td>[2,533  2,319]</td></tr>
+  <tr><td class="l">Bias <i>b</i> μετά την εκπαίδευση</td><td>0,897</td><td>0,963</td></tr>
+  <tr><td class="l">Πιθανότητα για το παράδειγμα [45, 85]</td><td>63,96%</td><td>65,02%</td></tr>
+  <tr><td class="l">Accuracy στα δεδομένα εκπαίδευσης</td><td>90,00%</td><td>90,00%</td></tr>
+  <caption>Σύγκριση των δύο υλοποιήσεων με τις ίδιες ρυθμίσεις. Οι μικρές διαφορές οφείλονται στις διαφορετικές τυχαίες αρχικές τιμές των βαρών.</caption>
+</table>
+
+<p>Το <code>epoch_loss</code> φθίνει συνεχώς και στις δύο υλοποιήσεις. Η εκπαίδευση σε matlab ξεκινά από μεγαλύτερο σφάλμα, επειδή έτυχε τα αρχικά βάρη να είναι χειρότερα, όμως μετά από 500 εποχές οι δύο υλοποιήσεις καταλήγουν πρακτικά στην ίδια τιμή (περίπου 0,23). Με 55 εποχές το σφάλμα είναι ακόμη αισθητά μεγαλύτερο, γι' αυτό και κρατάμε το num_epochs = 500.</p>
+
+<figure><img src="figures/ex2-loss.png" style="width: 108mm">
+<figcaption>Το epoch_loss (μέσο cross-entropy) σε κάθε εποχή για τις δύο υλοποιήσεις. Ο κατακόρυφος άξονας είναι λογαριθμικός.</figcaption></figure>
+
+<p>Το δίκτυο πετυχαίνει accuracy 90% στα δεδομένα εκπαίδευσης, δηλαδή ταξινομεί λάθος 10 από τα 100 δείγματα, τόσο σε matlab όσο και σε python. Για το παράδειγμα [45, 85] προβλέπει πιθανότητα περίπου 64% να ανήκει στην κατηγορία 1 (63,96% σε matlab και 65,02% σε python), άρα το κατατάσσει στην κατηγορία αυτή. Στο παρακάτω γράφημα φαίνονται τα δεδομένα και το όριο απόφασης (<i>ŷ</i> = 0,5) των δύο υλοποιήσεων. Τα δύο όρια σχεδόν ταυτίζονται.</p>
+
+<figure><img src="figures/ex2-boundary.png" style="width: 90mm">
+<figcaption>Τα δεδομένα εκπαίδευσης, το όριο απόφασης των δύο υλοποιήσεων και το παράδειγμα [45, 85].</figcaption></figure>
+
+<p>Μετά από 500 εποχές το σφάλμα εξακολουθεί να μειώνεται αργά, δηλαδή με ρυθμό μάθησης 0,001 το δίκτυο δεν έχει συγκλίνει πλήρως. Για σύγκριση, λύνοντας το ίδιο πρόβλημα μέχρι τη σύγκλιση (μέθοδος Newton σε όλα τα δεδομένα μαζί) το μέσο cross-entropy κατεβαίνει στο 0,2035, η πιθανότητα για το [45, 85] γίνεται 77,6% και το accuracy είναι 89%. Η ταξινόμηση των δειγμάτων επομένως πρακτικά δεν αλλάζει, η πιθανότητα όμως του παραδείγματος θα αυξανόταν αν συνεχίζαμε την εκπαίδευση.</p>
+
+<p>Τέλος, στον κώδικα python συγκρίνουμε με τον έτοιμο ταξινομητή LogisticRegression του sklearn, ο οποίος εκπαιδεύεται στο 80% των δεδομένων και ελέγχεται στο υπόλοιπο 20% (20 δείγματα, τυχαία επιλογή). Στην παραπάνω εκτέλεση έδωσε accuracy 75%. Επειδή το σύνολο ελέγχου είναι πολύ μικρό, η τιμή αυτή αλλάζει αρκετά από εκτέλεση σε εκτέλεση.</p>
+
+<h3>3. Convolutional Neural Networks για αναγνώριση εικόνων</h3>
+
+<p>Στην τελευταία άσκηση του σετ, κατασκευάζουμε ένα Convolutional Neural Network για την αναγνώριση φωτογραφιών ρούχων. Πρώτα, παρακολουθούμε την εξέλιξη των δεικτών accuracy πάνω στα δεδομένα εκπαίδευσης και τον δείκτη validation accuracy στα δεδομένα επικύρωσης. Όταν ο αριθμός epochs είναι 400, βλέπουμε στο παρακάτω γράφημα την κλιμάκωση των δεικτών:</p>
+
+<figure><img src="figures/ex3-dense-400-accuracy.jpg" style="width: 80mm"></figure>
+
+<p>Παρατηρούμε ότι το accuracy τείνει στη μονάδα, ενώ το validation διατηρείται σταθερό κοντά στο 0,9.</p>
+
+<p>Παρακάτω βλέπουμε την πρόβλεψη του μοντέλου:</p>
+
+<figure><img src="figures/ex3-dense-400-predictions.png" style="width: 80mm"></figure>
+
+<p>Μειώνοντας τον αριθμό του epochs απο 400 σε 50 και δοκιμάζοντας διάφορους optimizers, οι οποίοι παρέχονται από το keras api (αλγόριθμος adam, sgd, rmsprop, nadam, adamax, ftrl), παραθέτουμε τις παρακάτω εικόνες στις οποίες παρουσιάζεται το accuracy και το validation για κάθε έναν από τους αλγορίθμους και τις προβλέψεις τους. Η σύγκριση αυτή μπορεί πλέον να επαναληφθεί με την εντολή <code>python fashion.py compare</code>.</p>
+
+<div class="pair"><img src="figures/ex3-opt1-accuracy.png"><img src="figures/ex3-opt1-predictions.jpg"></div>
+<div class="pair"><img src="figures/ex3-opt2-accuracy.jpg"><img src="figures/ex3-opt2-predictions.png"></div>
+<div class="pair"><img src="figures/ex3-opt3-accuracy.jpg"><img src="figures/ex3-opt3-predictions.jpg"></div>
+<div class="pair"><img src="figures/ex3-opt4-accuracy.png"><img src="figures/ex3-opt4-predictions.jpg"></div>
+<div class="pair"><img src="figures/ex3-opt5-accuracy.jpg"><img src="figures/ex3-opt5-predictions.png"></div>
+<div class="pair"><img src="figures/ex3-opt6-accuracy.jpg"><img src="figures/ex3-opt6-predictions.jpg"></div>
+
+<p>Με παρατήρηση όλων των παραπάνω, καταλήγουμε στο συμπέρασμα ότι ο adam είναι ο ιδανικότερος για το πείραμά μας, καθώς έχει το μεγαλύτερο accuracy και validation accuracy.</p>
+
+<p>Στη συνέχεια, κατασκευάζουμε ένα NN σύμφωνα με τις οδηγίες της εκφώνησης. Αρχικά, υλοποιούμε το μοντέλο χωρίς batch normalization και τα αποτελέσματα της ακρίβειας και της πρόβλεψης του μοντέλου φαίνονται παρακάτω:</p>
+
+<div class="pair"><img src="figures/ex3-cnn-accuracy.jpg"><img src="figures/ex3-cnn-predictions.jpg"></div>
+
+<div class="keep">
+<p>Με batch normalization:</p>
+
+<div class="pair"><img src="figures/ex3-cnn-bn-accuracy.png"><img src="figures/ex3-cnn-bn-predictions.jpg"></div>
+</div>
+
+<div class="keep">
+<p>Το ολοκληρωμένο μοντέλο:</p>
+
+<div class="pair"><img src="figures/ex3-cnn-full-accuracy.jpg"><img src="figures/ex3-cnn-full-predictions.png"></div>
+</div>
+
+<p>Το validation accuracy αυξάνεται, με την προσθήκη επιπλέον επιπέδων στο μοντέλο και τείνει να ταυτιστεί με το accuracy.</p>
+
+</body>
+</html>
