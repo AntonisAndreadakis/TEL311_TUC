@@ -1,11 +1,15 @@
 function [X_rec] = recoverDataLDA(Z, v)
-
-% You need to return the following variables correctly.
-X_rec = zeros(size(Z, 1), length(v));
+% Map the projections Z back to the original space, on the line (or
+% subspace) spanned by the unit projection vectors v.
+%   v: one projection vector per column (NumFeatures x NewDim).
+%      A single vector may also be given as a row.
 
 % ====================== YOUR CODE HERE ======================
 
-X_rec = Z*v;
+if size(v, 2) ~= size(Z, 2)
+    v = v';       % a single vector given as a row
+end
+X_rec = Z*v';
 % =============================================================
 
 end

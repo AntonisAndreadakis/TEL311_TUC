@@ -1,18 +1,14 @@
 function [Z] = projectDataLDA(X, v)
-
-% You need to return the following variables correctly.
-Z = zeros(size(X, 1), 1);
+% Project the samples X (one per row) on the projection vectors v.
+%   v: one projection vector per column (NumFeatures x NewDim).
+%      A single vector may also be given as a row.
 
 % ====================== YOUR CODE HERE ======================
 
-[m, ~] = size(v);
-if m==1 
-    Z = X*v';
-else    
-    for i=1:m
-        Z(:,i)= X*v(i,:)';
-    end
+if size(v, 1) ~= size(X, 2)
+    v = v';       % a single vector given as a row
 end
+Z = X*v;
 % =============================================================
 
 end
