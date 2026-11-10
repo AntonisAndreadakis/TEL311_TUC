@@ -24,7 +24,7 @@ idx = zeros(m, 1);
 %
 tidx=zeros(m,K);
 for i=1:K
-    tidx(:,i)=sum((X-centroids(i,:)).^2,2);
+    tidx(:,i)=sum(bsxfun(@minus, X, centroids(i,:)).^2,2);
 end
 [~, idx] = min(tidx,[],2);
 % =============================================================

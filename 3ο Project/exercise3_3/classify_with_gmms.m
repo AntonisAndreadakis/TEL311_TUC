@@ -1,4 +1,6 @@
 function y = classify_with_gmms(x, Pm, M, S)
+    % Assign an example to the most probable GMM component.
+    %
     % INPUT:
     %   x: (1 X d) An example vector of dimension d
     %   Pm: (K X 1) mixing probabilities
@@ -6,13 +8,13 @@ function y = classify_with_gmms(x, Pm, M, S)
     %   S: (K X d X d) covariance matrices
     %
     % OUTPUT:
-    %   y:  The class index  
+    %   y:  The class index
 
-    % your code here
-    n = size(3,1);
-    for j=1:3
-        n(j) = log(sum(Pm(j)*mvnpdf(x,M,S)));
+    [K, d] = size(M);
+    logPost = zeros(K, 1);   % log( Pm(k) * N(x | M(k), S(k)) ), up to a constant
+    for k = 1:K
+        Sk = reshape(S(k, :, :), d, d);
+        logPost(k) = log(Pm(k)) + gaussLogPdf(x, M(k, :), Sk);
     end
-    idx = max(n);
-    [~,y] = find(n==idx);
+    [~, y] = max(logPost);
 end
