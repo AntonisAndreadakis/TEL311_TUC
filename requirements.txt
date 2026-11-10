@@ -1,0 +1,10 @@
+# Python packages used by the Python versions of the exercises.
+# Install with:  pip install -r requirements.txt
+numpy
+scipy
+pandas
+matplotlib
+scikit-learn      # iris data, linear SVM in 4.1, comparison in 4.2
+cvxopt            # QP solver for the SVM exercises 2.7
+tensorflow        # exercise 4.3 only (large download)
+pytest            # only to run the tests in tests/
