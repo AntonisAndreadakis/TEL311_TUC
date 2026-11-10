@@ -56,35 +56,41 @@ test_set_size=size(test0,1)+size(test1,1)+size(test2,1)+size(test3,1)+...
               size(test4,1)+size(test5,1)+size(test6,1)+size(test7,1)+...
               size(test8,1)+size(test9,1);
 confusion_matrix=zeros(10,10);
+
+% One row per digit with the Bernoulli parameters p_yi. Many pixels have
+% p=0 or p=1 exactly, which gives ln(0)=-Inf (and 0*Inf=NaN), so the
+% parameters are clamped to [ep, 1-ep] before taking logarithms.
+B=[b0;b1;b2;b3;b4;b5;b6;b7;b8;b9];
+ep=1e-10;
+B=min(max(B,ep),1-ep);
+logB=log(B);
+log1mB=log(1-B);
  
 for i=1:size(test0,2):size(test_set,2)
   label=floor(1+i/784);
   for j=1:size(test_set,1)
-    prediction=[];
-    prediction=[...
-    mean(b0.*test_set(j,i:i+size(test0,2)-1)+(1-b0).*(1-test_set(j,i:i+size(test0,2)-1))),...
-    mean(b1.*test_set(j,i:i+size(test0,2)-1)+(1-b1).*(1-test_set(j,i:i+size(test0,2)-1))),...
-    mean(b2.*test_set(j,i:i+size(test0,2)-1)+(1-b2).*(1-test_set(j,i:i+size(test0,2)-1))),...
-    mean(b3.*test_set(j,i:i+size(test0,2)-1)+(1-b3).*(1-test_set(j,i:i+size(test0,2)-1))),...
-    mean(b4.*test_set(j,i:i+size(test0,2)-1)+(1-b4).*(1-test_set(j,i:i+size(test0,2)-1))),...
-    mean(b5.*test_set(j,i:i+size(test0,2)-1)+(1-b5).*(1-test_set(j,i:i+size(test0,2)-1))),...
-    mean(b6.*test_set(j,i:i+size(test0,2)-1)+(1-b6).*(1-test_set(j,i:i+size(test0,2)-1))),...
-    mean(b7.*test_set(j,i:i+size(test0,2)-1)+(1-b7).*(1-test_set(j,i:i+size(test0,2)-1))),...
-    mean(b8.*test_set(j,i:i+size(test0,2)-1)+(1-b8).*(1-test_set(j,i:i+size(test0,2)-1))),...
-    mean(b9.*test_set(j,i:i+size(test0,2)-1)+(1-b9).*(1-test_set(j,i:i+size(test0,2)-1)))];
+    x=double(test_set(j,i:i+size(test0,2)-1));
+    % Naive Bayes (Bernoulli): p(x|y)=prod_i p_yi^x_i*(1-p_yi)^(1-x_i), so
+    % log p(x|y)=sum_i x_i*ln(p_yi)+(1-x_i)*ln(1-p_yi). Equal priors (same
+    % number of training samples per digit), so they are left out.
+    prediction=(logB*x'+log1mB*(1-x)')';
     [~,pred]=max(prediction);
     confusion_matrix(label,pred)=confusion_matrix(label,pred)+1;
     if(pred==label)
       correct=correct+1;
     end
   end
-  disp(['Accuracy after testing digits ',num2str(label-1),' : ',num2str(correct/(label*size(test0,25)))]);
+  disp(['Accuracy after testing digits ',num2str(label-1),' : ',num2str(correct/(label*size(test0,1)))]);
 end
 disp(['Accuracy: ', num2str(correct/test_set_size)]);
 confusion_matrix=confusion_matrix./size(test0,1);
 
 % Displaying the confusion matrix
 figure(11)
-imagesc(confusion_matrix);
+imagesc(0:9,0:9,confusion_matrix);
+colorbar
+xlabel('Classified as digit'); ylabel('True digit');
 title('Confusion Matrix');
+disp('Confusion matrix (row: true digit 0..9, column: classified as 0..9):');
+disp(confusion_matrix);
 

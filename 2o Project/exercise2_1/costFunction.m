@@ -28,12 +28,8 @@ cost=(((-y).*log(hypothesis))-((1-y).*log(1-hypothesis)));
 J=1/m*sum(cost);
 
 %##########Now we have calculated cost and now trying to calculate grad
-sqError = zeros(n,1);
-grad=zeros(n,1);
-for i=1:3
-    sqError(i,1)=sum((hypothesis-y).*X(:,i));
-end
-grad=1/m*sqError;
+% dJ/dtheta_j = 1/m * sum_i (h(x_i) - y_i) * x_ij   (vectorised, any n)
+grad=1/m*(X'*(hypothesis-y));
 
 % =============================================================
 
