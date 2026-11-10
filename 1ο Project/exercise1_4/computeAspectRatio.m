@@ -1,65 +1,21 @@
 function aspectRatio = computeAspectRatio(image)
-    [useless, num_rows, num_cols] = size(image);
+    % Aspect ratio (width/height) of the smallest rectangle that encloses
+    % the digit, i.e. all the non-zero pixels of the image.
+    %   image: 1 x num_rows x num_cols
+    [~, num_rows, num_cols] = size(image);
+    im = reshape(image, num_rows, num_cols);
 
-    % Fill your code
-    a0 = 0;
-    b0 = 0;
-    a1 = num_cols;
-    b1 = num_rows;
-    r = 0;
-    for i = 1 : num_rows
-        for j = 1 : num_cols
-            if image(1, i, j) ~= 0
-                b0 = i;
-                r = 1;
-                break
-            end
-        end
-        if r
-            break
-        end
+    rows = find(any(im ~= 0, 2));   % rows that contain part of the digit
+    cols = find(any(im ~= 0, 1));   % columns that contain part of the digit
+
+    if isempty(rows)                % blank image: no rectangle
+        aspectRatio = NaN;
+        return
     end
-    r = 0;
-    for i = num_rows : j
-        for j = 1 : num_cols
-            if image(1, i, j) ~= 0
-                b1 = i;
-                r = 1;
-                break
-            end
-        end
-        if r
-            break
-        end
-    end
-    r = 0;
-    for j = 1 : num_rows
-        for i = 1 : num_cols
-            if image(1, i, j) ~= 0
-                a0 = j;
-                r = 1;
-                break
-            end
-        end
-        if r
-            break
-        end
-    end
-    r = 0;
-    for j = num_rows : j
-        for i = 1 : num_cols
-            if image(1, i, j) ~= 0
-                a1 = j;
-                r = 1;
-                break
-            end
-        end
-        if r
-            break
-        end
-    end
-    w = a1 - a0;
-    h = b1 - b0;
+
+    % +1 because both the first and the last row/column belong to the digit
+    h = rows(end) - rows(1) + 1;
+    w = cols(end) - cols(1) + 1;
     aspectRatio = w/h;
 
 end

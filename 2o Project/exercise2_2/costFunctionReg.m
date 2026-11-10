@@ -17,8 +17,9 @@ m = length(y); % number of training examples
 %               derivatives of the cost w.r.t. each parameter in theta
 
 h = sigmoid ( X * theta);
-J = (1/m)*(-y'*log(h)-(1-y)'*log(1-h))+(lambda/(2*m))*sum(theta(2:size(theta)).^2);
-grad = (1/m)*((h-y)'*X)+((lambda/m)*[0;theta(2:size(theta))])';
+J = (1/m)*(-y'*log(h)-(1-y)'*log(1-h))+(lambda/(2*m))*sum(theta(2:end).^2);
+% theta(1) (intercept) is not regularised; grad is a column like theta
+grad = (1/m)*(X'*(h-y))+(lambda/m)*[0;theta(2:end)];
 
 % =============================================================
 

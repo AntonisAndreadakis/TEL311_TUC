@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<title>ΤΗΛ311 - Αναφορά 1ης Σειράς Ασκήσεων</title>
+<style>
+  @page { size: A4; margin: 18mm 21mm 17mm 21mm; }
+  body { font-family: "FreeSerif", "Times New Roman", "DejaVu Serif", serif; font-size: 11pt; line-height: 1.36; color: #000; }
+  header { text-align: center; margin-bottom: 9mm; }
+  header h1 { font-size: 17pt; margin: 0 0 4mm; color: #1f4e9c; }
+  header h2 { font-size: 14pt; margin: 0 0 4mm; color: #1f4e9c; }
+  header p { margin: 0; font-size: 12.5pt; font-weight: bold; color: #1f4e9c; }
+  header .rev { font-weight: normal; font-size: 10.5pt; color: #444; margin-top: 3mm; }
+  h3 { font-size: 13pt; margin: 8mm 0 2mm; color: #1f4e9c; break-after: avoid; }
+  h4 { font-size: 11.5pt; margin: 5mm 0 1mm; break-after: avoid; }
+  p { text-align: justify; margin: 0 0 2.5mm; }
+  table.data { border-collapse: collapse; margin: 3mm auto 2mm; font-size: 10.5pt; break-inside: avoid; }
+  table.data th, table.data td { border: 0.6pt solid #666; padding: 1.2mm 3.2mm; text-align: center; }
+  table.data th { background: #e9eef7; }
+  caption { caption-side: bottom; font-size: 9.5pt; color: #333; padding-top: 1.5mm; }
+  figure { margin: 3mm 0; text-align: center; break-inside: avoid; }
+  figure img { max-width: 100%; }
+  figcaption { font-size: 9.5pt; color: #333; margin-top: 1mm; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1mm 4mm; align-items: center; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1mm 3mm; align-items: center; }
+  .grid2 img, .grid3 img { width: 100%; }
+  .w60 img { width: 60%; }
+  .w50 img { width: 50%; }
+  .newpage { break-before: page; }
+  code, pre { font-family: "DejaVu Sans Mono", monospace; font-size: 9.5pt; }
+  pre { border: 0.6pt solid #666; padding: 2mm 3mm; margin: 2mm 0 3mm; line-height: 1.3; break-inside: avoid; }
+  /* mathematics in plain HTML */
+  .eq { text-align: center; margin: 2.5mm 0 3mm; break-inside: avoid; }
+  .mx { display: inline-table; vertical-align: middle; border-collapse: separate; border-spacing: 0; margin: 0 0.8mm;
+        border-left: 0.8pt solid #000; border-right: 0.8pt solid #000; border-radius: 2.2mm; line-height: 1.25; }
+  .mx td { padding: 0.2mm 1.6mm; text-align: center; white-space: nowrap; }
+  .fr { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; line-height: 1.15; margin: 0 0.4mm; }
+  .fr > span:first-child { border-bottom: 0.6pt solid #000; padding: 0 1mm 0.2mm; }
+  .fr > span:last-child { padding: 0.2mm 1mm 0; }
+  .nw { white-space: nowrap; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Στατιστική Μοντελοποίηση και Αναγνώριση Προτύπων (ΤΗΛ311)</h1>
+  <h2>Αναφορά 1ης Σειράς Ασκήσεων</h2>
+  <p>Ανδρεαδάκης Αντώνης 2013030059</p>
+  <p class="rev">Αναθεωρημένη έκδοση (Νοέμβριος 2026): τα θέματα 2, 3, 4 και 5 ξαναγράφτηκαν μετά από διόρθωση του κώδικα και των υπολογισμών, στο θέμα 1 προστέθηκαν τα αποτελέσματα για όλες τις τιμές του Κ και προστέθηκε το θέμα 6.</p>
+</header>
+
+<!-- ===================================================================== -->
+<h3>1. Principal Component Analysis (PCA)</h3>
+
+<p>Για το 1<sup>ο</sup> μέρος χρησιμοποιήθηκε η μέθοδος Principal Component Analysis σε ένα dataset έτσι, ώστε να γίνει εξοικείωση με τη μέθοδο αλλά και η χρήση του matlab για τέτοια προβλήματα. Πρώτα γίνεται εισαγωγή (μέσω της εντολής load) και απεικόνιση του dataset στον 2-D χώρο.</p>
+
+<figure class="w50"><img src="figures/pca-data.jpg"></figure>
+
+<p>Στη συνέχεια, με κανονικοποίηση (standardization) με μέση τιμή μηδέν και διασπορά 1, στα αρχικά δείγματα παίρνουμε τη νέα κατανομή των δειγμάτων. Έπειτα εφαρμόζουμε τον αλγόριθμο PCA και υπολογίζεται ο πίνακας συνδιασποράς των κανονικοποιημένων δεδομένων με χρήση του τύπου
+Σ = <span class="fr"><span>1</span><span><i>m</i></span></span> <i>X</i><sup><i>T</i></sup><i>X</i>. Τέλος, επιστρέφουμε τους πίνακες ιδιοτιμών και ιδιοδιανυσμάτων που υπολογίστηκαν με χρήση της εντολής eig() του matlab:</p>
+
+<figure>
+  <div class="grid2">
+    <img src="figures/pca-eigenvectors.jpg"><img src="figures/pca-projection.jpg">
+  </div>
+  <figcaption>Αριστερά: τα αρχικά δείγματα με τις δύο κύριες συνιστώσες. Δεξιά: τα κανονικοποιημένα δείγματα (μπλε) και η ανάκτησή τους από τη μία διάσταση (κόκκινο).</figcaption>
+</figure>
+
+<p>Έτσι, υπολογίζεται η συνεισφορά της κάθε συνιστώσας στην ολική διακύμανση και με προβολή και ανάκτηση των δειγμάτων, λαμβάνουμε το νέο αποτέλεσμα σε μικρότερη διάσταση. Η πρώτη κύρια συνιστώσα είναι η <i>u</i><sub>1</sub> = [−0,7071 −0,7071]<sup><i>T</i></sup> και εξηγεί το 86,78% της συνολικής διακύμανσης, ενώ η δεύτερη το υπόλοιπο 13,22%. Το πρώτο δείγμα προβάλλεται στην τιμή <i>z</i> = 1,4813 και ανακτάται ως το σημείο (−1,0474, −1,0474), τιμές που συμφωνούν με τις αναμενόμενες του script.</p>
+
+<p>Για το 2<sup>ο</sup> μέρος εφαρμόστηκε ο αλγόριθμος PCA σε ένα πραγματικό dataset με εικόνες προσώπων. Αρχικά, κάνοντας εισαγωγή και προβολή των εικόνων χρησιμοποιήσαμε τις συναρτήσεις feature_normalize κι έπειτα myPCA.</p>
+
+<figure>
+  <div class="grid2">
+    <img src="figures/faces-original.jpg"><img src="figures/faces-eigenfaces.jpg">
+  </div>
+  <figcaption>Αριστερά: τα πρώτα 100 πρόσωπα του dataset. Δεξιά: οι πρώτες 36 κύριες συνιστώσες (eigenfaces).</figcaption>
+</figure>
+
+<p>Οι πρώτες κύριες συνιστώσες μοιάζουν με θολά πρόσωπα: αποτυπώνουν τα γενικά χαρακτηριστικά που αλλάζουν περισσότερο από εικόνα σε εικόνα (φωτισμός, περίγραμμα προσώπου, θέση ματιών και στόματος), ενώ οι επόμενες περιγράφουν όλο και πιο λεπτές λεπτομέρειες.</p>
+
+<p>Στη συνέχεια μειώνουμε τη διάσταση των δειγμάτων από 1024 σε Κ με την projectData και τα προβάλλουμε ξανά στον αρχικό χώρο με τη recoverData. Από την απεικόνιση των δειγμάτων, παρατηρείται σημαντική απώλεια πληροφορίας, δηλαδή μια θόλωση. Η διαδικασία έγινε για Κ = 100 και επαναλήφθηκε για Κ = 10, 50 και 200:</p>
+
+<figure>
+  <div class="grid2">
+    <img src="figures/faces-k010.png"><img src="figures/faces-k050.png">
+    <img src="figures/faces-k100.png"><img src="figures/faces-k200.png">
+  </div>
+  <figcaption>Αρχικά (κανονικοποιημένα) και ανακτημένα πρόσωπα για Κ = 10, 50, 100 και 200.</figcaption>
+</figure>
+
+<p>Για να γίνει ορατή η μείωση των διαστάσεων, οι εικόνες προβάλλονται στον ίδιο χώρο με χρήση 10, 50, 100 και 200 ιδιοδιανυσμάτων. Παρατηρούμε λοιπόν, ότι όσο αυξάνεται ο αριθμός των συνιστωσών τόσο πιο ξεκάθαρο είναι το αποτέλεσμα οπτικά. Δηλαδή, όσο η παράμετρος Κ αυξάνεται τόσο καλύτερη είναι η ανάκτηση των εικόνων, όπως φαίνεται και στις παραπάνω εικόνες. Αυτό φαίνεται και από το ποσοστό της συνολικής διακύμανσης που διατηρούν οι Κ πρώτες συνιστώσες:</p>
+
+<table class="data">
+  <tr><th>Κ</th><th>10</th><th>50</th><th>100</th><th>200</th></tr>
+  <tr><td>Διακύμανση που διατηρείται</td><td>67,27%</td><td>86,79%</td><td>93,19%</td><td>97,31%</td></tr>
+</table>
+
+<p>Με Κ = 10 διακρίνεται μόνο το γενικό σχήμα και ο φωτισμός κάθε προσώπου, ενώ με Κ = 200 οι ανακτημένες εικόνες σχεδόν δεν ξεχωρίζουν από τις αρχικές, παρότι χρησιμοποιούμε λιγότερο από το ένα πέμπτο των αρχικών διαστάσεων.</p>
+
+<!-- ===================================================================== -->
+<h3>2. Ταξινομητής LDA: υπολογισμός του διανύσματος προβολής</h3>
+
+<p>Από τα δεδομένα της άσκησης έχουμε:</p>
+
+<div class="eq">
+  μ<sub>1</sub> = <table class="mx"><tr><td>−5</td></tr><tr><td>5</td></tr></table>,&ensp;
+  μ<sub>2</sub> = <table class="mx"><tr><td>10</td></tr><tr><td>15</td></tr></table>,&ensp;
+  Σ<sub>1</sub> = <table class="mx"><tr><td>11</td><td>9</td></tr><tr><td>9</td><td>11</td></tr></table>,&ensp;
+  Σ<sub>2</sub> = <table class="mx"><tr><td>2</td><td>0</td></tr><tr><td>0</td><td>2</td></tr></table>
+</div>
+
+<p>Οπότε</p>
+
+<div class="eq">
+  μ<sub>1</sub> − μ<sub>2</sub> = <table class="mx"><tr><td>−5</td></tr><tr><td>5</td></tr></table> − <table class="mx"><tr><td>10</td></tr><tr><td>15</td></tr></table> = <table class="mx"><tr><td>−15</td></tr><tr><td>−10</td></tr></table>
+</div>
+
+<p>Οι δύο κατηγορίες είναι ισοπίθανες, άρα γνωρίζουμε ότι S<sub>w</sub> = <span class="fr"><span>1</span><span>2</span></span> (Σ<sub>1</sub> + Σ<sub>2</sub>), δηλαδή</p>
+
+<div class="eq">
+  S<sub>w</sub> = <span class="fr"><span>1</span><span>2</span></span> <table class="mx"><tr><td>13</td><td>9</td></tr><tr><td>9</td><td>13</td></tr></table>
+  = <table class="mx"><tr><td><span class="fr"><span>13</span><span>2</span></span></td><td><span class="fr"><span>9</span><span>2</span></span></td></tr><tr><td><span class="fr"><span>9</span><span>2</span></span></td><td><span class="fr"><span>13</span><span>2</span></span></td></tr></table>
+</div>
+
+<p>Η ορίζουσα του S<sub>w</sub> είναι</p>
+
+<div class="eq">
+  |S<sub>w</sub>| = <span class="fr"><span>13</span><span>2</span></span> · <span class="fr"><span>13</span><span>2</span></span> − <span class="fr"><span>9</span><span>2</span></span> · <span class="fr"><span>9</span><span>2</span></span>
+  = <span class="fr"><span>169</span><span>4</span></span> − <span class="fr"><span>81</span><span>4</span></span> = <span class="fr"><span>88</span><span>4</span></span> = 22
+</div>
+
+<p>Σύμφωνα με την υπόδειξη, ο αντίστροφος του S<sub>w</sub> θα είναι:</p>
+
+<div class="eq">
+  S<sub>w</sub><sup>−1</sup> = <span class="fr"><span>1</span><span>22</span></span>
+  <table class="mx"><tr><td><span class="fr"><span>13</span><span>2</span></span></td><td>−<span class="fr"><span>9</span><span>2</span></span></td></tr><tr><td>−<span class="fr"><span>9</span><span>2</span></span></td><td><span class="fr"><span>13</span><span>2</span></span></td></tr></table>
+  = <span class="fr"><span>1</span><span>44</span></span> <table class="mx"><tr><td>13</td><td>−9</td></tr><tr><td>−9</td><td>13</td></tr></table>
+</div>
+
+<p>Άρα το διάνυσμα προβολής είναι</p>
+
+<div class="eq">
+  w = S<sub>w</sub><sup>−1</sup> (μ<sub>1</sub> − μ<sub>2</sub>)
+  = <span class="fr"><span>1</span><span>44</span></span> <table class="mx"><tr><td>13</td><td>−9</td></tr><tr><td>−9</td><td>13</td></tr></table> <table class="mx"><tr><td>−15</td></tr><tr><td>−10</td></tr></table>
+  = <span class="fr"><span>1</span><span>44</span></span> <table class="mx"><tr><td>13·(−15) + (−9)·(−10)</td></tr><tr><td>(−9)·(−15) + 13·(−10)</td></tr></table>
+</div>
+<div class="eq">
+  = <span class="fr"><span>1</span><span>44</span></span> <table class="mx"><tr><td>−195 + 90</td></tr><tr><td>135 − 130</td></tr></table>
+  = <span class="fr"><span>1</span><span>44</span></span> <table class="mx"><tr><td>−105</td></tr><tr><td>5</td></tr></table>
+  = <table class="mx"><tr><td>−2,3864</td></tr><tr><td>0,1136</td></tr></table>
+</div>
+
+<p>Η κατεύθυνση του w είναι αυτή του διανύσματος [−21 1]<sup><i>T</i></sup>, δηλαδή σχεδόν παράλληλη με τον οριζόντιο άξονα. Παρότι η διαφορά των μέσων τιμών έχει μεγάλη συνιστώσα και στους δύο άξονες, η κλάση ω<sub>1</sub> έχει μεγάλη διασπορά κατά μήκος της διαγωνίου (ισχυρή θετική συσχέτιση των δύο χαρακτηριστικών), οπότε ο πολλαπλασιασμός με τον S<sub>w</sub><sup>−1</sup> στρέφει την προβολή μακριά από τη διεύθυνση αυτή.</p>
+
+<p>Υλοποίησα και σε matlab την άσκηση και έδωσε το ίδιο αποτέλεσμα: w = [−2.3864 0.1136]<sup><i>T</i></sup>. Κώδικας:</p>
+
+<pre>clc; clear all; close all;
+m1 = [-5; 5];
+m2 = [10; 15];
+d = m1 - m2;
+S1 = [11 9; 9 11];
+S2 = [2 0; 0 2];
+Sw = (1/2)*(S1 + S2);
+w = (inv(Sw))*d;</pre>
+
+<!-- ===================================================================== -->
+<h3>3. Linear Discriminant Analysis (LDA) vs PCA</h3>
+
+<p>Για το 1<sup>ο</sup> μέρος εφαρμόσαμε τον αλγόριθμο LDA σε ένα σύνολο από τεχνητά δεδομένα και απεικονίζονται παρακάτω:</p>
+
+<figure class="w50"><img src="figures/lda-data.jpg"></figure>
+
+<p>Μετά, εφαρμόσαμε τον αλγόριθμο του fisher Linear Discriminant, με σκοπό τη μείωση των διαστάσεων και την εύκολη διάκρισή τους σε 2 κατηγορίες. Αφού αφαιρέσουμε από τα δείγματα κάθε κλάσης τη μέση τιμή της, υπολογίζουμε τους πίνακες σκέδασης S<sub>1</sub> και S<sub>2</sub>, τον S<sub>w</sub> = S<sub>1</sub> + S<sub>2</sub> και το διάνυσμα προβολής v = S<sub>w</sub><sup>−1</sup>(μ<sub>1</sub> − μ<sub>2</sub>), το οποίο κανονικοποιούμε ώστε να έχει μοναδιαίο μέτρο. Για τα δεδομένα μας προκύπτει v = [−0,5602 0,8284]. Όπως και στην 1<sup>η</sup> άσκηση, στο διάνυσμα που βρέθηκε από τον αλγόριθμο προβάλλουμε και ανακτούμε τα δεδομένα πάνω σε αυτό το διάνυσμα. Την ίδια διαδικασία ακολουθούμε και με τη μέθοδο PCA, όπου η πρώτη κύρια συνιστώσα είναι η u<sub>1</sub> = [−0,7071 −0,7071] και εξηγεί το 73,25% της διακύμανσης.</p>
+
+<figure>
+  <div class="grid2">
+    <img src="figures/lda-fisher-projection.png"><img src="figures/lda-pca-projection.jpg">
+  </div>
+  <figcaption>Προβολή των δειγμάτων στη μία διάσταση. Αριστερά: στην κατεύθυνση του LDA. Δεξιά: στην πρώτη κύρια συνιστώσα του PCA.</figcaption>
+</figure>
+
+<p>Με τη χρήση του LDA, η διάκριση των δεδομένων στη μειωμένη διάσταση είναι πιο «εύκολη». Οι προβολές της πρώτης κλάσης βρίσκονται στο διάστημα [0,083, 1,492] και της δεύτερης στο [−1,363, −0,135], δηλαδή οι δύο κλάσεις δεν επικαλύπτονται καθόλου πάνω στην ευθεία και χωρίζονται με ένα απλό κατώφλι. Αντιθέτως, με χρήση του PCA η διάκριση δεν είναι δυνατή, παρότι μειώνεται η διάσταση: οι προβολές της πρώτης κλάσης πέφτουν στο [−1,614, 1,322] και της δεύτερης στο [−2,071, 2,062], άρα τα δείγματα των δύο κλάσεων ανακατεύονται.</p>
+
+<p>Ο λόγος είναι ότι ο PCA δεν χρησιμοποιεί τις ετικέτες των κλάσεων και επιλέγει την κατεύθυνση με τη μεγαλύτερη συνολική διακύμανση, η οποία εδώ σχηματίζει γωνία περίπου 79° με την κατεύθυνση του LDA, δηλαδή είναι σχεδόν κάθετη στην κατεύθυνση που χωρίζει τις κλάσεις. Ο LDA, αντίθετα, μεγιστοποιεί το κριτήριο του Fisher</p>
+<div class="eq">
+  J(v) = <span class="fr"><span>(v<sup><i>T</i></sup>(μ<sub>1</sub> − μ<sub>2</sub>))<sup>2</sup></span><span>v<sup><i>T</i></sup>S<sub>w</sub>v</span></span>
+</div>
+<p>δηλαδή την απόσταση των προβολών των μέσων τιμών σε σχέση με τη διασπορά μέσα σε κάθε κλάση. Το κριτήριο παίρνει την τιμή 0,6061 για την κατεύθυνση του LDA και μόλις 0,0192 για την κατεύθυνση του PCA.</p>
+
+<p>Στο 2<sup>ο</sup> μέρος εφαρμόσαμε multiclass LDA πάνω στο IRIS dataset, το οποίο περιλαμβάνει 50 δείγματα από 3 διαφορετικά είδη λουλουδιών. Σκοπός είναι η μείωση των διαστάσεων, όπως παραπάνω. Εισάγουμε και προβάλλουμε τα δείγματα από τις 3 κλάσεις και εφαρμόζουμε τον αλγόριθμο LDA. Έτσι έχουμε:</p>
+
+<figure>
+  <div class="grid2">
+    <img src="figures/iris-features.jpg"><img src="figures/iris-lda.png">
+  </div>
+  <figcaption>Αριστερά: τα δύο πρώτα (κανονικοποιημένα) χαρακτηριστικά του Iris. Δεξιά: τα δείγματα μετά την προβολή στα δύο διανύσματα του LDA (μπλε: setosa, κόκκινο: versicolor, πράσινο: virginica).</figcaption>
+</figure>
+
+<p>Η συνάρτηση myLDA υπολογίζει από τα δεδομένα τις prior πιθανότητες P<sub>i</sub> (εδώ 1/3 για κάθε κλάση), τις μέσες τιμές μ<sub>i</sub> των κλάσεων, τον ολικό μέσο μ<sub>0</sub> = Σ<sub>i</sub> P<sub>i</sub> μ<sub>i</sub>, τον πίνακα S<sub>w</sub> = Σ<sub>i</sub> P<sub>i</sub> Σ<sub>i</sub> και τον πίνακα S<sub>b</sub> = Σ<sub>i</sub> P<sub>i</sub> (μ<sub>i</sub> − μ<sub>0</sub>)(μ<sub>i</sub> − μ<sub>0</sub>)<sup><i>T</i></sup>. Έπειτα υπολογίζει τις ιδιοτιμές και τα ιδιοδιανύσματα του S<sub>w</sub><sup>−1</sup>S<sub>b</sub>, τα ταξινομεί με φθίνουσα σειρά ιδιοτιμής και κρατά τα NewDim = 2 πρώτα. Οι ιδιοτιμές που προκύπτουν είναι 32,19 και 0,285 (οι άλλες δύο είναι μηδενικές, αφού με 3 κλάσεις ο S<sub>b</sub> έχει βαθμό το πολύ 2), άρα σχεδόν όλη η διαχωριστική πληροφορία (99,1%) βρίσκεται στο πρώτο διάνυσμα προβολής.</p>
+
+<p>Στα δύο πρώτα χαρακτηριστικά η διάκριση των κλάσεων δεν είναι εύκολη, αφού τα δείγματα των versicolor και virginica είναι ανακατεμένα. Με εφαρμογή του αλγορίθμου LDA, οι 3 κλάσεις γίνονται εύκολα διακριτές. Στον πρώτο άξονα η setosa (τιμές από 1,25 έως 2,17) απέχει πολύ από τις άλλες δύο, ενώ η versicolor (από −0,99 έως 0,10) και η virginica (από −2,02 έως −0,84) σχηματίζουν δύο ξεχωριστές ομάδες με μια μικρή μόνο επικάλυψη στο όριό τους. Ο δεύτερος άξονας συνεισφέρει ελάχιστα στον διαχωρισμό, όπως δείχνει και η μικρή ιδιοτιμή του.</p>
+
+<!-- ===================================================================== -->
+<h3>4. Εξαγωγή χαρακτηριστικών και υπολογισμός των εκ των υστέρων πιθανοτήτων με τον κανόνα του Bayes</h3>
+
+<p>Σκοπός της άσκησης είναι η δημιουργία ενός δειγματοχώρου και ο υπολογισμός κάποιων πιθανοτήτων με χρήση του θεωρήματος Bayes. Υπολογίσαμε το aspect ratio κάθε εικόνας, το οποίο ορίζεται από το ελάχιστο ορθογώνιο που περικλείει έναν χειρόγραφο αριθμό στο mnist dataset. Δηλαδή ο λόγος width/height. Για να βρούμε το ορθογώνιο εντοπίζουμε την πρώτη και την τελευταία γραμμή, καθώς και την πρώτη και την τελευταία στήλη της εικόνας που περιέχουν μη μηδενικά pixel. Το ύψος και το πλάτος είναι το πλήθος των γραμμών και των στηλών που καλύπτει το ψηφίο (τελευταία − πρώτη + 1). Για το σύνολο των 60.000 εικόνων η ελάχιστη τιμή του aspect ratio είναι 0,1 και η μέγιστη 2,2222.</p>
+
+<p>Συγκεκριμένα έγινε επεξεργασία μόνο των ψηφίων 1 και 2 για την κλάση 1 και 2 αντίστοιχα. Μετά τον υπολογισμό του aspect ratio αυτών των κλάσεων, δημιουργήσαμε ένα διάστημα τιμών με εύρος [minAspectRatio, maxAspectRatio] και από τις 2 κλάσεις, το οποίο είναι το [0,1, 2,2222] (οι ακραίες τιμές όλου του dataset ανήκουν σε εικόνες αυτών των δύο κλάσεων). Στη συνέχεια, χωρίσαμε αυτό το διάστημα σε 3 ίσα υποδιαστήματα, Low = [0,1, 0,8074), Medium = [0,8074, 1,5148) και High = [1,5148, 2,2222], και έγινε ταξινόμηση κάθε εικόνας σε καθένα από αυτά, ανάλογα το aspect ratio της κάθε εικόνας. Τα αποτελέσματα που πήραμε από τις γραφικές παραστάσεις φαίνονται παρακάτω:</p>
+
+<figure>
+  <div class="grid3">
+    <img src="figures/aspect-hist-all.png"><img src="figures/aspect-hist-c1.png"><img src="figures/aspect-hist-c2.png">
+  </div>
+  <figcaption>Ιστογράμματα του aspect ratio με 3 bins: και οι δύο κλάσεις μαζί, κλάση C<sub>1</sub> (ψηφίο 1) και κλάση C<sub>2</sub> (ψηφίο 2).</figcaption>
+</figure>
+
+<table class="data">
+  <tr><th></th><th>Low</th><th>Medium</th><th>High</th><th>Σύνολο</th></tr>
+  <tr><td>C<sub>1</sub> (ψηφίο 1)</td><td>6393</td><td>349</td><td>0</td><td>6742</td></tr>
+  <tr><td>C<sub>2</sub> (ψηφίο 2)</td><td>1473</td><td>4402</td><td>83</td><td>5958</td></tr>
+  <tr><td>C<sub>1</sub> και C<sub>2</sub></td><td>7866</td><td>4751</td><td>83</td><td>12700</td></tr>
+  <caption>Πλήθος εικόνων ανά υποδιάστημα.</caption>
+</table>
+
+<p>Οι πιθανότητες που υπολογίσαμε είναι οι εξής:</p>
+
+<p><b>Prior Probabilities.</b> Είναι το ποσοστό των εικόνων κάθε κλάσης:
+P(C<sub>1</sub>) = 6742/12700 = 0,5309 και P(C<sub>2</sub>) = 5958/12700 = 0,4691.</p>
+
+<p><b>Likelihoods.</b> Είναι το ποσοστό των εικόνων της κάθε κλάσης που πέφτει σε κάθε υποδιάστημα, π.χ. P(L|C<sub>1</sub>) = 6393/6742:</p>
+
+<table class="data">
+  <tr><th></th><th>X = L</th><th>X = M</th><th>X = H</th></tr>
+  <tr><td>P(X|C<sub>1</sub>)</td><td>0,9482</td><td>0,0518</td><td>0,0000</td></tr>
+  <tr><td>P(X|C<sub>2</sub>)</td><td>0,2472</td><td>0,7388</td><td>0,0139</td></tr>
+  <tr><td>P(X) (evidence)</td><td>0,6194</td><td>0,3741</td><td>0,0065</td></tr>
+</table>
+
+<p><b>Evidence.</b> Προκύπτει από το θεώρημα ολικής πιθανότητας,
+P(X) = P(X|C<sub>1</sub>)P(C<sub>1</sub>) + P(X|C<sub>2</sub>)P(C<sub>2</sub>), που ισούται με το ποσοστό όλων των εικόνων των δύο κλάσεων σε κάθε υποδιάστημα, π.χ. P(L) = 7866/12700 = 0,6194. Οι τιμές φαίνονται στην τελευταία γραμμή του πίνακα.</p>
+
+<p><b>Posterior Probabilities.</b> Για μια νέα εικόνα με χαμηλό λόγο όψεως (X = L), από τον κανόνα του Bayes έχουμε:</p>
+
+<div class="eq">
+  P(C<sub>1</sub>|X = L) = <span class="fr"><span>P(L|C<sub>1</sub>) P(C<sub>1</sub>)</span><span>P(L)</span></span>
+  = <span class="fr"><span>0,9482 · 0,5309</span><span>0,6194</span></span> = 0,8127
+</div>
+<div class="eq">
+  P(C<sub>2</sub>|X = L) = <span class="fr"><span>P(L|C<sub>2</sub>) P(C<sub>2</sub>)</span><span>P(L)</span></span>
+  = <span class="fr"><span>0,2472 · 0,4691</span><span>0,6194</span></span> = 0,1873
+</div>
+
+<p>Οι δύο εκ των υστέρων πιθανότητες έχουν άθροισμα 1, όπως πρέπει. Το αποτέλεσμα είναι αναμενόμενο: το ψηφίο 1 είναι στενό και ψηλό, οπότε σχεδόν όλες οι εικόνες του (94,8%) έχουν χαμηλό aspect ratio, ενώ το ψηφίο 2 είναι πιο πλατύ και οι περισσότερες εικόνες του (73,9%) ανήκουν στο μεσαίο υποδιάστημα. Έτσι, μια εικόνα με χαμηλό λόγο όψεως ταξινομείται στην κλάση C<sub>1</sub> με πιθανότητα 81,27%.</p>
+
+<!-- ===================================================================== -->
+<h3>5. Bayes</h3>
+
+<h4>a) Σύνορο απόφασης</h4>
+
+<p>Για κανονικές κατανομές χρησιμοποιούμε τις συναρτήσεις διάκρισης</p>
+
+<div class="eq">
+  g<sub>i</sub>(x) = −<span class="fr"><span>1</span><span>2</span></span> (x − μ<sub>i</sub>)<sup><i>T</i></sup> Σ<sub>i</sub><sup>−1</sup> (x − μ<sub>i</sub>) − <span class="fr"><span>1</span><span>2</span></span> ln|Σ<sub>i</sub>| + ln P(ω<sub>i</sub>)
+</div>
+
+<p>και το σύνορο απόφασης είναι τα σημεία x = [x<sub>1</sub> x<sub>2</sub>]<sup><i>T</i></sup> για τα οποία g<sub>1</sub>(x) = g<sub>2</sub>(x). Για τους πίνακες της άσκησης έχουμε |Σ<sub>1</sub>| = |Σ<sub>2</sub>| = 1,2<sup>2</sup> − 0,4<sup>2</sup> = 1,28 και</p>
+
+<div class="eq">
+  Σ<sub>1</sub><sup>−1</sup> = <span class="fr"><span>1</span><span>1,28</span></span> <table class="mx"><tr><td>1,2</td><td>0,4</td></tr><tr><td>0,4</td><td>1,2</td></tr></table>
+  = <table class="mx"><tr><td>0,9375</td><td>0,3125</td></tr><tr><td>0,3125</td><td>0,9375</td></tr></table>,
+  &emsp;
+  Σ<sub>2</sub><sup>−1</sup> = <table class="mx"><tr><td>0,9375</td><td>−0,3125</td></tr><tr><td>−0,3125</td><td>0,9375</td></tr></table>
+</div>
+
+<p>Οι όροι με τις ορίζουσες είναι ίσοι και απλοποιούνται, οπότε η συνθήκη g<sub>1</sub>(x) = g<sub>2</sub>(x) γράφεται</p>
+
+<div class="eq">
+  (x − μ<sub>2</sub>)<sup><i>T</i></sup> Σ<sub>2</sub><sup>−1</sup> (x − μ<sub>2</sub>) − (x − μ<sub>1</sub>)<sup><i>T</i></sup> Σ<sub>1</sub><sup>−1</sup> (x − μ<sub>1</sub>) = 2 ln <span class="fr"><span>P(ω<sub>2</sub>)</span><span>P(ω<sub>1</sub>)</span></span>
+</div>
+
+<p>Οι δύο τετραγωνικές μορφές είναι</p>
+
+<div class="eq">
+  (x − μ<sub>1</sub>)<sup><i>T</i></sup> Σ<sub>1</sub><sup>−1</sup> (x − μ<sub>1</sub>) = 0,9375 [(x<sub>1</sub> − 3)<sup>2</sup> + (x<sub>2</sub> − 3)<sup>2</sup>] + 0,625 (x<sub>1</sub> − 3)(x<sub>2</sub> − 3)
+</div>
+<div class="eq">
+  (x − μ<sub>2</sub>)<sup><i>T</i></sup> Σ<sub>2</sub><sup>−1</sup> (x − μ<sub>2</sub>) = 0,9375 [(x<sub>1</sub> − 6)<sup>2</sup> + (x<sub>2</sub> − 6)<sup>2</sup>] − 0,625 (x<sub>1</sub> − 6)(x<sub>2</sub> − 6)
+</div>
+
+<p>Στη διαφορά τους οι όροι x<sub>1</sub><sup>2</sup> και x<sub>2</sub><sup>2</sup> απαλείφονται, επειδή οι δύο αντίστροφοι πίνακες έχουν την ίδια διαγώνιο, ενώ απαλείφονται και οι γραμμικοί όροι. Μένει μόνο ο όρος x<sub>1</sub>x<sub>2</sub> και μια σταθερά: η διαφορά ισούται με 22,5 − 1,25 x<sub>1</sub>x<sub>2</sub>. Επομένως το σύνορο απόφασης είναι</p>
+
+<div class="eq">
+  1,25 x<sub>1</sub>x<sub>2</sub> = 22,5 − 2 ln <span class="fr"><span>P(ω<sub>2</sub>)</span><span>P(ω<sub>1</sub>)</span></span>
+  &ensp;⟺&ensp;
+  x<sub>1</sub>x<sub>2</sub> = 18 − 1,6 ln <span class="fr"><span>P(ω<sub>2</sub>)</span><span>P(ω<sub>1</sub>)</span></span>
+</div>
+
+<p>Ένα δείγμα ταξινομείται στην ω<sub>1</sub> όταν το γινόμενο x<sub>1</sub>x<sub>2</sub> είναι μικρότερο από το δεξί μέλος και στην ω<sub>2</sub> όταν είναι μεγαλύτερο.</p>
+
+<h4>b), c) Ισοϋψείς καμπύλες και σύνορα απόφασης</h4>
+
+<p>Η γραφική που φαίνεται παρακάτω απαντά στα ερωτήματα b και c της άσκησης. Με κόκκινο σχεδιάζονται οι ισοϋψείς της p(x|ω<sub>1</sub>), με μπλε της p(x|ω<sub>2</sub>) και με τα υπόλοιπα χρώματα τα σύνορα απόφασης για τις πέντε τιμές της P(ω<sub>1</sub>).</p>
+
+<figure class="w60"><img src="figures/bayes-different-cov.png"></figure>
+
+<h4>d) Σχολιασμός</h4>
+
+<p>Το σύνορο απόφασης είναι υπερβολή της μορφής x<sub>1</sub>x<sub>2</sub> = c, με ασύμπτωτες τους δύο άξονες. Αυτό συμβαίνει επειδή οι πίνακες συνδιασποράς είναι διαφορετικοί, οπότε οι τετραγωνικοί όροι των g<sub>1</sub> και g<sub>2</sub> δεν απαλείφονται πλήρως και το σύνορο είναι καμπύλη δευτέρου βαθμού. Στη συγκεκριμένη περίπτωση οι δύο πίνακες διαφέρουν μόνο στο πρόσημο της συσχέτισης, γι' αυτό επιζεί μόνο ο όρος x<sub>1</sub>x<sub>2</sub>. Στην περιοχή των δεδομένων φαίνεται ο κλάδος του πρώτου τεταρτημορίου. Ο δεύτερος κλάδος βρίσκεται στο τρίτο τεταρτημόριο, μακριά από τις δύο κατανομές, και η ω<sub>1</sub> επιλέγεται ανάμεσα στους δύο κλάδους.</p>
+
+<p>Η εκ των προτέρων πιθανότητα δεν αλλάζει τη μορφή του συνόρου αλλά μόνο τη σταθερά c, η οποία παίρνει τις παρακάτω τιμές. Όσο αυξάνεται η P(ω<sub>1</sub>), η υπερβολή απομακρύνεται από το μ<sub>1</sub> και πλησιάζει το μ<sub>2</sub>, δηλαδή μεγαλώνει η περιοχή απόφασης της πιο πιθανής κλάσης σε βάρος της άλλης. Για P(ω<sub>1</sub>) = P(ω<sub>2</sub>) = 0,5 ο λογάριθμος μηδενίζεται και το σύνορο εξαρτάται μόνο από τις πιθανοφάνειες.</p>
+
+<table class="data">
+  <tr><th>P(ω<sub>1</sub>)</th><th>0,1</th><th>0,25</th><th>0,5</th><th>0,75</th><th>0,9</th></tr>
+  <tr><td>Σ<sub>1</sub> ≠ Σ<sub>2</sub>: x<sub>1</sub>x<sub>2</sub> = c</td><td>14,484</td><td>16,242</td><td>18</td><td>19,758</td><td>21,516</td></tr>
+  <tr><td>Σ<sub>1</sub> = Σ<sub>2</sub>: x<sub>1</sub> + x<sub>2</sub> = c</td><td>7,828</td><td>8,414</td><td>9</td><td>9,586</td><td>10,172</td></tr>
+  <caption>Η σταθερά c του συνόρου απόφασης για κάθε τιμή της P(ω<sub>1</sub>) (η δεύτερη γραμμή αφορά το ερώτημα e).</caption>
+</table>
+
+<h4>e) Ίδιοι πίνακες συνδιασποράς</h4>
+
+<p>Όταν Σ<sub>1</sub> = Σ<sub>2</sub> = Σ, ο τετραγωνικός όρος x<sup><i>T</i></sup>Σ<sup>−1</sup>x είναι κοινός στις g<sub>1</sub> και g<sub>2</sub> και απαλείφεται. Το σύνορο g<sub>1</sub>(x) = g<sub>2</sub>(x) γίνεται γραμμικό, w<sup><i>T</i></sup>x + w<sub>0</sub> = 0, με</p>
+
+<div class="eq">
+  w = Σ<sup>−1</sup>(μ<sub>1</sub> − μ<sub>2</sub>) = <table class="mx"><tr><td>0,9375</td><td>−0,3125</td></tr><tr><td>−0,3125</td><td>0,9375</td></tr></table> <table class="mx"><tr><td>−3</td></tr><tr><td>−3</td></tr></table> = <table class="mx"><tr><td>−1,875</td></tr><tr><td>−1,875</td></tr></table>
+</div>
+<div class="eq">
+  w<sub>0</sub> = −<span class="fr"><span>1</span><span>2</span></span> (μ<sub>1</sub><sup><i>T</i></sup>Σ<sup>−1</sup>μ<sub>1</sub> − μ<sub>2</sub><sup><i>T</i></sup>Σ<sup>−1</sup>μ<sub>2</sub>) + ln <span class="fr"><span>P(ω<sub>1</sub>)</span><span>P(ω<sub>2</sub>)</span></span>
+  = −<span class="fr"><span>1</span><span>2</span></span> (11,25 − 45) + ln <span class="fr"><span>P(ω<sub>1</sub>)</span><span>P(ω<sub>2</sub>)</span></span>
+  = 16,875 − ln <span class="fr"><span>P(ω<sub>2</sub>)</span><span>P(ω<sub>1</sub>)</span></span>
+</div>
+
+<p>Άρα το σύνορο απόφασης είναι η ευθεία</p>
+
+<div class="eq">
+  3,75 (x<sub>1</sub> + x<sub>2</sub>) = 33,75 − 2 ln <span class="fr"><span>P(ω<sub>2</sub>)</span><span>P(ω<sub>1</sub>)</span></span>
+  &ensp;⟺&ensp;
+  x<sub>1</sub> + x<sub>2</sub> = 9 − <span class="fr"><span>8</span><span>15</span></span> ln <span class="fr"><span>P(ω<sub>2</sub>)</span><span>P(ω<sub>1</sub>)</span></span>
+</div>
+
+<p>και το δείγμα ταξινομείται στην ω<sub>1</sub> όταν το άθροισμα x<sub>1</sub> + x<sub>2</sub> είναι μικρότερο από το δεξί μέλος. Η γραφική παράσταση για αυτή την περίπτωση είναι η παρακάτω (τώρα και οι δύο κλάσεις έχουν ισοϋψείς με τον ίδιο προσανατολισμό):</p>
+
+<figure class="w60"><img src="figures/bayes-equal-cov.png"></figure>
+
+<p>Το σύνορο απόφασης είναι πλέον ευθεία με κλίση −1, κάθετη στο διάνυσμα w. Εδώ το w έχει την ίδια διεύθυνση με το μ<sub>1</sub> − μ<sub>2</sub>, επειδή η διαφορά των μέσων τιμών είναι ιδιοδιάνυσμα του Σ. Για ίσες εκ των προτέρων πιθανότητες η ευθεία x<sub>1</sub> + x<sub>2</sub> = 9 περνά από το μέσο (4,5, 4,5) του τμήματος που ενώνει τις δύο μέσες τιμές. Όταν αλλάζει η P(ω<sub>1</sub>), η ευθεία μετατοπίζεται παράλληλα προς τον εαυτό της: για P(ω<sub>1</sub>) &gt; 0,5 πλησιάζει το μ<sub>2</sub> και για P(ω<sub>1</sub>) &lt; 0,5 το μ<sub>1</sub>, δηλαδή και πάλι μεγαλώνει η περιοχή της πιο πιθανής κλάσης. Οι τιμές της σταθεράς φαίνονται στη δεύτερη γραμμή του προηγούμενου πίνακα.</p>
+
+<!-- ===================================================================== -->
+<h3>6. Minimum risk</h3>
+
+<p>Συμβολίζουμε με λ<sub>ki</sub> το στοιχείο (k, i) του πίνακα ρίσκου L, δηλαδή το κόστος όταν ένα δείγμα της κλάσης ω<sub>k</sub> ταξινομείται στην κλάση ω<sub>i</sub>. Έτσι λ<sub>11</sub> = λ<sub>22</sub> = 0, λ<sub>12</sub> = 0,5 και λ<sub>21</sub> = 1. Αν R<sub>1</sub> και R<sub>2</sub> είναι οι περιοχές στις οποίες αποφασίζουμε ω<sub>1</sub> και ω<sub>2</sub> αντίστοιχα, το μέσο ρίσκο είναι</p>
+
+<div class="eq">
+  r = λ<sub>12</sub> P(ω<sub>1</sub>) ∫<sub>R<sub>2</sub></sub> p(x|ω<sub>1</sub>) dx + λ<sub>21</sub> P(ω<sub>2</sub>) ∫<sub>R<sub>1</sub></sub> p(x|ω<sub>2</sub>) dx
+</div>
+
+<p>και ελαχιστοποιείται όταν κάθε x ανατίθεται στην κλάση με το μικρότερο κόστος, δηλαδή όταν αποφασίζουμε ω<sub>1</sub> αν</p>
+
+<div class="eq">
+  λ<sub>12</sub> P(ω<sub>1</sub>) p(x|ω<sub>1</sub>) &gt; λ<sub>21</sub> P(ω<sub>2</sub>) p(x|ω<sub>2</sub>)
+  &ensp;⟺&ensp;
+  <span class="fr"><span>p(x|ω<sub>1</sub>)</span><span>p(x|ω<sub>2</sub>)</span></span> &gt; <span class="fr"><span>λ<sub>21</sub> P(ω<sub>2</sub>)</span><span>λ<sub>12</sub> P(ω<sub>1</sub>)</span></span> = <span class="fr"><span>1</span><span>0,5</span></span> = 2
+</div>
+
+<p>αφού P(ω<sub>1</sub>) = P(ω<sub>2</sub>). Για σ<sub>1</sub> = 1 και σ<sub>2</sub> = 2 οι πυκνότητες Rayleigh για x ≥ 0 είναι
+p(x|ω<sub>1</sub>) = x e<sup>−x²/2</sup> και p(x|ω<sub>2</sub>) = <span class="fr"><span>x</span><span>4</span></span> e<sup>−x²/8</sup>, οπότε ο λόγος πιθανοφάνειας είναι</p>
+
+<div class="eq">
+  <span class="fr"><span>p(x|ω<sub>1</sub>)</span><span>p(x|ω<sub>2</sub>)</span></span> = 4 e<sup>−x²/2 + x²/8</sup> = 4 e<sup>−3x²/8</sup>
+</div>
+
+<p>Ο λόγος αυτός είναι φθίνουσα συνάρτηση του x, άρα αποφασίζουμε ω<sub>1</sub> για x &lt; x<sub>0</sub> και ω<sub>2</sub> για x &gt; x<sub>0</sub>, όπου το όριο απόφασης x<sub>0</sub> προκύπτει από την ισότητα:</p>
+
+<div class="eq">
+  4 e<sup>−3x<sub>0</sub>²/8</sup> = 2
+  &ensp;⟹&ensp;
+  <span class="fr"><span>3x<sub>0</sub><sup>2</sup></span><span>8</span></span> = ln 2
+  &ensp;⟹&ensp;
+  x<sub>0</sub> = <span class="nw">√(<span class="fr"><span>8 ln 2</span><span>3</span></span>)</span> ≈ 1,3596
+</div>
+
+<p>Με το όριο αυτό το ρίσκο υπολογίζεται από τις συναρτήσεις κατανομής Rayleigh, F<sub>i</sub>(x) = 1 − e<sup>−x²/(2σ<sub>i</sub>²)</sup>:</p>
+
+<div class="eq">
+  r(x<sub>0</sub>) = <span class="fr"><span>1</span><span>2</span></span> [0,5 e<sup>−x<sub>0</sub>²/2</sup> + 1 · (1 − e<sup>−x<sub>0</sub>²/8</sup>)]
+  = <span class="fr"><span>1</span><span>2</span></span> [0,5 · 0,3968 + (1 − 0,7937)] ≈ 0,2024
+</div>
+
+<p>Το αποτέλεσμα επαληθεύτηκε και αριθμητικά: ελαχιστοποιώντας το r(x<sub>0</sub>) ως προς x<sub>0</sub> (με αριθμητική ολοκλήρωση των δύο πυκνοτήτων) το ελάχιστο βρέθηκε στο x<sub>0</sub> = 1,3596 με τιμή 0,2024.</p>
+
+<p>Για σύγκριση, το όριο που ελαχιστοποιεί την πιθανότητα σφάλματος (ίσα κόστη) είναι <span class="nw">x<sub>0</sub> = √(16 ln 2 / 3) ≈ 1,9227</span>. Επειδή η λανθασμένη ταξινόμηση ενός δείγματος της ω<sub>2</sub> κοστίζει τα διπλάσια από το αντίστροφο λάθος, το όριο μετακινείται προς τα αριστερά, ώστε να μικρύνει η περιοχή R<sub>1</sub> και να γίνονται λιγότερα από τα «ακριβά» λάθη.</p>
+
+</body>
+</html>

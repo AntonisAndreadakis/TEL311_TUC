@@ -22,7 +22,7 @@ clear ; close all; clc;
 %% ============ Part 1: PCA on 2D Samples ===================
 %  We use a small dataset that is easy to visualize
 %
-fprintf('Readinging and Visualizing initial 2D dataset.\n\n');
+fprintf('Reading and Visualizing initial 2D dataset.\n\n');
 
 %  The following command loads the dataset. You should now have the 
 %  variable X in your environment
@@ -118,6 +118,7 @@ fprintf('\nLoading face dataset.\n\n');
 load ('ex1_1_faces.mat')
 
 %  Display the first 100 faces in the dataset
+figure;
 displayData(X(1:100, :));
 
 fprintf('Program paused. Press enter to continue.\n');
@@ -138,6 +139,7 @@ fprintf(['\nRunning PCA on face dataset.\n' ...
 [U, S] = myPCA(X_norm);
 
 %  Visualize the top 36 eigenvectors found
+figure;
 displayData(U(:, 1:36)');
 
 fprintf('Program paused. Press enter to continue.\n');
@@ -149,38 +151,36 @@ pause;
 %  If you are applying a machine learning algorithm 
 fprintf('\nDimension reduction for face dataset.\n\n');
 
-K = 200;
-Z = projectData(X_norm, U, K);
+%  The assignment asks for K = 100 and then for K = 10, 50, 200
+for K = [100 10 50 200]
+    Z = projectData(X_norm, U, K);
 
-fprintf('The projected data Z has a size of: ')
-fprintf('%d ', size(Z));
+    fprintf('K = %d: the projected data Z has a size of: ', K)
+    fprintf('%d ', size(Z));
+    fprintf('\n');
 
-fprintf('\n\nProgram paused. Press enter to continue.\n');
-pause;
+    %  Visualization of Faces after PCA Dimension Reduction ====
+    %  Project images to the eigen space using the top K eigen vectors and
+    %  visualize only using those K dimensions
+    %  Compare to the original input, which is also displayed
+    X_rec  = recoverData(Z, U, K);
 
-%  Visualization of Faces after PCA Dimension Reduction ====
-%  Project images to the eigen space using the top K eigen vectors and 
-%  visualize only using those K dimensions
-%  Compare to the original input, which is also displayed
+    figure;
+    % Display normalized data
+    subplot(1, 2, 1);
+    displayData(X_norm(1:100,:));
+    title('Original faces');
+    axis square;
 
-fprintf('\nVisualizing the projected (reduced dimension) faces.\n\n');
+    % Display reconstructed data from only K eigenfaces
+    subplot(1, 2, 2);
+    displayData(X_rec(1:100,:));
+    title(sprintf('Recovered faces (K = %d)', K));
+    axis square;
 
-K = 200;
-X_rec  = recoverData(Z, U, K);
+    fprintf('Program paused. Press enter to continue.\n');
+    pause;
+end
 
-% Display normalized data
-subplot(1, 2, 1);
-displayData(X_norm(1:100,:));
-title('Original faces');
-axis square;
-
-% Display reconstructed data from only k eigenfaces
-subplot(1, 2, 2);
-displayData(X_rec(1:100,:));
-title('Recovered faces');
-axis square;
-
-fprintf('Program paused. Press enter to continue.\n');
-pause;
 
 

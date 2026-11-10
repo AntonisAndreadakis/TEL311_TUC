@@ -16,12 +16,14 @@ end
 [idx,jdx,vv] = find(fea); %Return row and column indices of the non-zero elements of fea
 %sparse generates a sparse matrix where the elements in indices equal to 1
 %Frequency of term in all document
-df = full(sum(sparse(idx,jdx,1),1)); 
+df = full(sum(sparse(idx,jdx,1,nSmp,mFea),1)); 
 
 df(df==0) = 1; %Make sure we dont divide with 0
 idf = log(nSmp./df);
 
-tffea = sparse(idx,jdx,log(vv)+1);
+%Give the size explicitly: otherwise all-zero documents/words at the end
+%of the matrix are silently dropped and the result has the wrong size
+tffea = sparse(idx,jdx,log(vv)+1,nSmp,mFea);
 
 fea2 = tffea';
 idf = idf';

@@ -15,7 +15,7 @@ S = zeros(n);
 % Apply PCA by computing the eigenvectors and eigenvalues of the covariance matrix. 
 %
 
-R = cov(X);
+R = (X'*X)/m;   % covariance matrix Sigma = (1/m)*X'*X (X has zero mean)
 [V,D] = eig(R);
 eigenval = diag(D);
 [eigenval, ind] = sort(eigenval, 1, 'descend');

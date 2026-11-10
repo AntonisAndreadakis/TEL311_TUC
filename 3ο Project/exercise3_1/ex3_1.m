@@ -14,7 +14,13 @@ faculty_filename='Data/faculty_TDM.csv';
 project_filename='Data/project_TDM.csv';
 student_filename='Data/student_TDM.csv';
 
+%Get the vocabulary used in the term-documents from one of the files
+Vocabulary=GetVocabulary(course_filename);  %Select one of the files as input
+
 R = input('Enter the number of words to be used: ');
+if ~isscalar(R) || R~=round(R) || R<1 || R>size(Vocabulary,1)
+    error('The number of words must be a whole number between 1 and %d.', size(Vocabulary,1));
+end
 dtype = input('Enter (1) for norm2 and (2) for Cosine Similarity: ');
 disp(' ');
 out=sprintf('Number of words selected: %d',R);
@@ -37,9 +43,6 @@ K=[1 3 5 10]; %Different values for K nearest Neighbours
 %   READ and Preprocess the DATA
 %-------------------------------------------------------------------------
 
-%Get the vocabulary used in the term-documents from one of the files
-Vocabulary=GetVocabulary(course_filename);  %Select one of the files as input
-
 %Get the term frequencies from input files
 f_course = (dlmread(course_filename,';',1,1)) ; 
 f_student = (dlmread(student_filename,';',1,1)) ;
@@ -58,15 +61,22 @@ labels=[lab_course; lab_faculty; lab_project; lab_student];
             
 %Entropy Transformation of the frequency matrix
 %Also returns the entropy transformed features
-e = getWordEntropy(f); %%%Complete your code in the function
-tfidfFea = tfidf(f, 1);  %TF-IDF features
+e = getWordEntropy(f);
 
-%Transform the feature vectors
-f=tfidfFea;  %TF-IDF features
+%Create the vocabulary of the R lowest entropy-weight terms.
+%GetNewVocabulary applies the TF-IDF transformation to the selected
+%words, so it must be given the raw term counts f.
+[NewVocabulary, new_e, new_f] = GetNewVocabulary(R, Vocabulary, e, f);
 
-%Create the vocabulary of the top R entropy terms
-%%%Complete your code in the function
-[NewVocabulary, new_e, new_f] = GetNewVocabulary(R, Vocabulary, e, f); 
+%Remove the documents that contain none of the selected words. Their
+%feature vectors are all zeros: they carry no information and tie at
+%Euclidean distance 1 with every other (unit length) document.
+emptyDocs = sum(new_f.^2, 2) < 1e-18;
+new_f = new_f(~emptyDocs,:);
+labels = labels(~emptyDocs);
+out=sprintf('Documents without any selected word (removed): %d of %d', ...
+    sum(emptyDocs), length(emptyDocs));
+disp(out)
 
 %-------------------------------------------------------------------------
 %        kNN Classification
@@ -103,15 +113,15 @@ f=tfidfFea;  %TF-IDF features
         
 		%Start the Classification and Cross Validation
         for cv = 1:NFolds
-            test_f = new_f(find(foldInd==cv),:)'; %test features for fold cv
-            test_y = labels(find(labels==cv),:);  %test labels for fold cv
-            train_f = new_f(find(foldInd~=cv),:)';%train features for fold cv
-            train_y = labels(find(labels~=cv),:); %train labels for fold cv
+            test_f = new_f(foldInd==cv,:);   %test features for fold cv
+            test_y = labels(foldInd==cv);    %test labels for fold cv
+            train_f = new_f(foldInd~=cv,:);  %train features for fold cv
+            train_y = labels(foldInd~=cv);   %train labels for fold cv
             test_z = KNN_classify(k, train_f, train_y, test_f, dtype); %Return the predicted labels
 
             %Check Accuracy for fold
-            pinakas = sum(test_z==train_y);
-            FoldAcc(cv) = 100*((pinakas)/length(test_z)); %Accuracy of fold cv 
+            NumErrors(cv) = sum(test_z~=test_y);
+            FoldAcc(cv) = 100*mean(test_z==test_y); %Accuracy of fold cv
             
             out=sprintf('Fold: %d, Accuracy: %.2f%%',cv, FoldAcc(cv));
             disp(out)

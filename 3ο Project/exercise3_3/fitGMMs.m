@@ -1,4 +1,6 @@
 function [Pm, M, S] = fitGMMs(X, K)
+    % Fit a Gaussian Mixture Model with the EM algorithm.
+    %
     % INPUT:
     %   X: (N X d) N example vectors of dimension d
     %   K: number of GMM components
@@ -6,63 +8,53 @@ function [Pm, M, S] = fitGMMs(X, K)
     % OUTPUT:
     %   Pm: (K X 1) mixing probabilities
     %   M: (K X d) mean vectors
-    %   S: (K X d X d) covariance matrices 
-      
+    %   S: (K X d X d) covariance matrices
+
     [N, d] = size(X);
-    
-    % Initialize using kmeans. You may use the matlab kmeans.
-    [~,c] = kmeans(X,K);
-    % your code here        
-    G = zeros(N, K); % likelihood of classes given features
-    [pPi,pMiu,pSigma] = myFunc();
-    
-    for its = 1:100
-        % E-step. Calculation of likelihood 'G'
-        % your code here     
-        p = real(gaussian());  % size=Px(N, K);
-        p(isnan(p))=0;        % kill NaN
-        p(isnan(p))=0;        % kill inf
-        % Likelihood normalization (of G)
-        G = p.*repmat(pPi, N, 1);      %numerator  = pi(k) * N(xi | pMiu(k), pSigma(k))
-        G = G./repmat(sum(G, 2), 1, K); %denominator = pi(j) *N(xi | pMiu(j), pSigma(j))sum over j
-        % M-step. Parameter updates
-        % your code here        
-        n = sum(G, 1);    % number of samples in each cluster
-        n(isnan(n))=0;    % kill NaN
-        n(isinf(n))=0;    % kill inf
-        pMiu = diag(1./n)*G'*X2; % update through MLE
-        pPi = n/N;
-        for t = 1:K 
-            X2 = X-repmat(pMiu(t, :), N, 1);
-            pSigma(:,:,t) = (X2'*(diag(G(:, t))*X2))/n(t);
-        end
-        Pm = pPi; 
-        M = pMiu;
-        S = pSigma;
-    end
-    
-    function [pPi,pMiu,pSigma] = myFunc()
-        pPi = zeros(1, K);
-        pMiu = c; 
-        pSigma = zeros(d, d, K); 
-        distmat = repmat(sum(X.*X, 2), 1, K) + repmat(sum(pMiu.*pMiu, 2)', N, 1) - 2*X*pMiu';
-        [~, labels] = min(distmat, [], 2);%Return the minimum from each row
-        for k=1:K
-            y = X(labels == k, :);
-            pPi(k) = size(y, 1)/N;
-            pSigma(:, :, k) = cov(y);
-         end
+    maxIters = 200;      % upper bound on EM iterations
+    tol = 1e-6;          % stop when the log-likelihood improves less than this
+    reg = 1e-6*eye(d);   % small ridge that keeps every covariance invertible
+
+    % ---- Initialize using kmeans: every cluster becomes one component ----
+    labels = kmeans(X, K, 'Replicates', 5);
+    Pm = zeros(K, 1);
+    M = zeros(K, d);
+    S = zeros(K, d, d);
+    for k = 1:K
+        Xk = X(labels == k, :);
+        Pm(k) = size(Xk, 1) / N;
+        M(k, :) = mean(Xk, 1);
+        S(k, :, :) = cov(Xk) + reg;
     end
 
-    function p = gaussian()
-    %Gaussian posterior probability 
-        p = zeros(N, 1);
-        for k = 1:1
-            X2 = X-repmat(pMiu(k, :), N, 1); %x-m
-            inv_S = inv(pSigma(:, :, k));
-            np = sum((X2*inv_S).*X2, 2);
-            var = (2*pi)^(-d/2)*sqrt(det(inv_S));
-            p(:, 1) = var*exp(-0.5*np);
+    prevLogLik = -Inf;
+    for its = 1:maxIters
+        % ---- E-step: responsibilities G(n,k) = P(component k | x_n) ----
+        logJoint = zeros(N, K);   % log( Pm(k) * N(x_n | M(k), S(k)) )
+        for k = 1:K
+            Sk = reshape(S(k, :, :), d, d);
+            logJoint(:, k) = log(Pm(k)) + gaussLogPdf(X, M(k, :), Sk);
+        end
+        % log-sum-exp over the components, for numerical stability
+        maxLog = max(logJoint, [], 2);
+        logPx = maxLog + log(sum(exp(bsxfun(@minus, logJoint, maxLog)), 2));
+        G = exp(bsxfun(@minus, logJoint, logPx));
+
+        % ---- Convergence check on the data log-likelihood ----
+        logLik = sum(logPx);
+        if abs(logLik - prevLogLik) < tol * abs(logLik)
+            break;
+        end
+        prevLogLik = logLik;
+
+        % ---- M-step: maximum-likelihood updates weighted by G ----
+        Nk = sum(G, 1)';                       % effective samples per component
+        Pm = Nk / N;
+        M = bsxfun(@rdivide, G' * X, Nk);
+        for k = 1:K
+            Xc = bsxfun(@minus, X, M(k, :));
+            Sk = (Xc' * bsxfun(@times, Xc, G(:, k))) / Nk(k);
+            S(k, :, :) = (Sk + Sk')/2 + reg;   % keep it exactly symmetric
         end
     end
 end
